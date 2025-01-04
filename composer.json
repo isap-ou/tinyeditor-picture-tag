@@ -1,0 +1,19 @@
+{
+    "name": "isapp/filament-forms-tinyeditor-picture-tag",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Isapp\\FilamentFormsTinyeditorPictureTag\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Isapp Devs"
+        }
+    ],
+    "require": {
+        "filament/filament": "^3.2",
+        "spatie/laravel-medialibrary": "^11.11",
+        "paquettg/php-html-parser": "^2.2"
+    }
+}
