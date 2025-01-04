@@ -48,6 +48,9 @@ class ProcessPictureTag
             $imageHtml = $image->outerHtml();
             $pictureTag = view('picture')->with([
                 'media' => $media,
+                'mediaConversions' => collect(
+                    config('filament-forms-tinyeditor-picture-tag.media_conversions', [])
+                )->sortBy('position'),
                 'imageHtml' => $imageHtml,
             ])->render();
 

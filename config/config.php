@@ -1,11 +1,9 @@
 <?php
 
-use Isapp\FilamentFormsTinyeditorPictureTag\Enums\ProviderType;
-
 return [
     'processed_fields' => ['content'],
     'storage_disk' => 'public',
-    'driver' => ProviderType::NON_TRANSLATABLE->value,
+    'driver' => 'non-translatable',
     'media_collection' => 'editor-collection',
     'media_conversions' => [
         [

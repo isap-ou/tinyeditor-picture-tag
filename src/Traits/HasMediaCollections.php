@@ -2,13 +2,9 @@
 
 namespace Isapp\FilamentFormsTinyeditorPictureTag\Traits;
 
-use Spatie\MediaLibrary\InteractsWithMedia;
-
 trait HasMediaCollections
 {
-    use InteractsWithMedia;
-
-    public function registerMediaCollections(): void
+    public function registerMediaCollection(): void
     {
         $this->addMediaCollection(config('filament-forms-tinyeditor-picture-tag.media_collection'))
             ->registermediaConversions( fn () => $this->applyMediaConversions() );

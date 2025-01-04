@@ -1,7 +1,12 @@
-<picture>
-    <source type="image/webp" srcset="{{ $media->getFullUrl('lg_webp') }}" media="(min-width: 576px)">
-    <source type="{{ $media->mime_type }}" srcset="{{ $media->getFullUrl('lg') }}" media="(min-width: 576px)">
-    <source type="image/webp" srcset="{{ $media->getFullUrl('sm_webp') }}">
-    <source type="{{ $media->mime_type }}" srcset="{{ $media->getFullUrl('sm') }}">
-    {!! $imageHtml !!}
-</picture>
+@if (!empty($mediaConversions))
+    <picture>
+        @foreach($mediaConversions as $mediaConversion)
+            @if (!empty($mediaConversion['format']) && $mediaConversion['format'] === 'webp')
+                <source type="image/webp" srcset="{{ $media->getFullUrl($mediaConversion['name']) }}" @if (!empty($mediaConversion['width'])) media="(min-width: {{ $mediaConversion['width'] }}px)" @endif>
+            @else
+                <source type="{{ $media->mime_type }}" srcset="{{ $media->getFullUrl($mediaConversion['name']) }}" @if (!empty($mediaConversion['width'])) media="(min-width: {{ $mediaConversion['width'] }}px)" @endif>
+            @endif
+        @endforeach
+        {!! $imageHtml !!}
+    </picture>
+@endif
