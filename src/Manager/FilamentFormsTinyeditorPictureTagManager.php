@@ -3,10 +3,9 @@
 namespace Isapp\FilamentFormsTinyeditorPictureTag\Manager;
 
 use Illuminate\Support\Manager;
-use Isapp\FilamentFormsTinyeditorPictureTag\Actions\ProcessPictureTag;
-use Isapp\FilamentFormsTinyeditorPictureTag\Contracts\TinyeditorPictureTagConverter;
-use Isapp\FilamentFormsTinyeditorPictureTag\Services\DefaultEditorConverter;
-use Isapp\FilamentFormsTinyeditorPictureTag\Services\TranslatableEditorConverter;
+use Isapp\FilamentFormsTinyeditorPictureTag\Processors\BaseProcessor;
+use Isapp\FilamentFormsTinyeditorPictureTag\Processors\NonTranslatableProcessor;
+use Isapp\FilamentFormsTinyeditorPictureTag\Processors\TranslatableProcessor;
 use PHPHtmlParser\Dom;
 
 class FilamentFormsTinyeditorPictureTagManager extends Manager
@@ -16,17 +15,13 @@ class FilamentFormsTinyeditorPictureTagManager extends Manager
         return $this->config->get('filament-forms-tinyeditor-picture-tag.driver');
     }
 
-    protected function createNonTranslatableDriver(): TinyeditorPictureTagConverter
+    protected function createNonTranslatableDriver(): BaseProcessor
     {
-        return new DefaultEditorConverter(
-            new ProcessPictureTag(new Dom())
-        );
+        return new NonTranslatableProcessor(new Dom());
     }
 
-    protected function createTranslatableDriver(): TinyeditorPictureTagConverter
+    protected function createTranslatableDriver(): BaseProcessor
     {
-        return new TranslatableEditorConverter(
-            new ProcessPictureTag(new Dom())
-        );
+        return new TranslatableProcessor(new Dom());
     }
 }

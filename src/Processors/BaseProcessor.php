@@ -1,19 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace Isapp\FilamentFormsTinyeditorPictureTag\Actions;
+namespace Isapp\FilamentFormsTinyeditorPictureTag\Processors;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Isapp\FilamentFormsTinyeditorPictureTag\Contracts\TinyeditorPictureTag;
+use Isapp\FilamentFormsTinyeditorPictureTag\PictureTags\PictureTag;
 use PHPHtmlParser\Dom;
 
-class ProcessPictureTag
+abstract class BaseProcessor
 {
     public function __construct(
         protected Dom $dom
     ) {}
 
-    public function process(string $html, Model $model): string
+    public function process(string $html, TinyeditorPictureTag $model, PictureTag $pictureTag): string
     {
         /** @var Dom $dom */
         $dom = $this->dom->loadStr($html);
@@ -40,17 +41,14 @@ class ProcessPictureTag
             $media = $model->addMedia(Storage::disk(
                 config('filament-forms-tinyeditor-picture-tag.storage_disk', 'public')
             )->path($src))
-            ->withCustomProperties(['random_id' => Str::random(10)])
-            ->toMediaCollection(config('filament-forms-tinyeditor-picture-tag.media_collection'));
+                ->withCustomProperties(['random_id' => Str::random(10)])
+                ->toMediaCollection($pictureTag->collectionName);
 
             $image->setAttribute('src', $media->getFullUrl());
             $image->setAttribute('loading', 'lazy');
             $imageHtml = $image->outerHtml();
             $pictureTag = view('picture')->with([
                 'media' => $media,
-                'mediaConversions' => collect(
-                    config('filament-forms-tinyeditor-picture-tag.media_conversions', [])
-                )->sortBy('position'),
                 'imageHtml' => $imageHtml,
             ])->render();
 
@@ -65,4 +63,6 @@ class ProcessPictureTag
 
         return $dom->outerHtml;
     }
+
+    abstract protected function convert(TinyeditorPictureTag $model): void;
 }

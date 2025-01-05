@@ -2,25 +2,25 @@
 
 namespace Isapp\FilamentFormsTinyeditorPictureTag\Observers;
 
-use Isapp\FilamentFormsTinyeditorPictureTag\Contracts\TinyeditorPictureTagProvider;
-use Isapp\FilamentFormsTinyeditorPictureTag\Facades\TinyeditorPictureTag;
+use Isapp\FilamentFormsTinyeditorPictureTag\Contracts\TinyeditorPictureTag;
+use Isapp\FilamentFormsTinyeditorPictureTag\Manager\FilamentFormsTinyeditorPictureTagManager;
 
 class TinyeditorPictureTagObserver
 {
     /**
      * Handle the "created" event.
      */
-    public function created(TinyeditorPictureTagProvider $model): void
+    public function created(TinyeditorPictureTag $model): void
     {
-        TinyeditorPictureTag::driver($model->getProvider())->convert($model);
+        app(FilamentFormsTinyeditorPictureTagManager::class)->driver($model->getPictureTagDriver())->convert($model);
     }
 
     /**
      * Handle the "updated" event.
      */
-    public function updated(TinyeditorPictureTagProvider $model): void
+    public function updated(TinyeditorPictureTag $model): void
     {
-        TinyeditorPictureTag::driver($model->getProvider())->convert($model);
+        app(FilamentFormsTinyeditorPictureTagManager::class)->driver($model->getPictureTagDriver())->convert($model);
     }
 
 }
