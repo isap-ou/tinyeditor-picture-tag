@@ -1,5 +1,15 @@
 {
   "name": "isapp/tinyeditor-picture-tag",
+  "description": "This helper is designed for Laravel projects and works through model observers triggered after a model is created or updated. It transforms the default <img> tags inserted by TinyMCE into <picture> tags, enabling responsive images based on your predefined configuration.",
+  "keywords": [
+    "framework",
+    "laravel",
+    "laravel-package",
+    "filament",
+    "filamentphp",
+    "php",
+    "tinymce"
+  ],
   "type": "library",
   "license": "MIT",
   "autoload": {
@@ -9,10 +19,19 @@
   },
   "authors": [
     {
+      "name": "ISAP OÜ",
+      "email": "contact@isap.me",
+      "homepage": "https:/isap.me"
+    },
+    {
       "name": "Andrii Trush",
-      "email": "contact@isap.me"
+      "email": "andrii.trush@isapp.be",
+      "homepage": "https://isapp.be"
     }
   ],
+  "support": {
+    "email": "contact@isap.me"
+  },
   "require": {
     "filament/filament": "^3.2",
     "spatie/laravel-medialibrary": "^11.11",
