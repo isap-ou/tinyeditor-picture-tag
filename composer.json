@@ -21,7 +21,7 @@
     {
       "name": "ISAP OÜ",
       "email": "contact@isap.me",
-      "homepage": "https:/isap.me"
+      "homepage": "https://isap.me"
     },
     {
       "name": "Andrii Trush",
@@ -43,5 +43,6 @@
         "Isapp\\TinyeditorPictureTag\\TinyeditorPictureTagServiceProvider"
       ]
     }
-  }
+  },
+  "minimum-stability": "stable"
 }
