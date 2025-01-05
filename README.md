@@ -1,107 +1,122 @@
-# Filament Forms TinyMCE Editor Image Helper
+# TinyMCE Picture Tag Helper for Laravel
 
-It's helper package for module https://github.com/mohamedsabil83/filament-forms-tinyeditor
-The main goal is creating responsive images in content of some content...
-Also, the base of this module is https://spatie.be/docs/laravel-medialibrary/v11/introduction
+[![TinyMCE Picture Tag Helper for Laravel](images/banner.png)](https://github.com/isap-ou/tinyeditor-picture-tag)
+
+This helper is designed for Laravel projects and works through model observers triggered after a model is created or
+updated.
+It transforms the default `<img>` tags inserted by TinyMCE into `<picture>` tags, enabling responsive images based on
+your predefined configuration.
+
+> **⚠️ Important:**  
+> This helper works exclusively with [Spatie Media Library](https://spatie.be/docs/laravel-medialibrary).
+> Make sure the library is installed and properly configured in your project before using this helper.
+
+## How It Works
+
+The helper listens for model creation or updates and processes any TinyMCE content by converting `<img>` tags into
+`<picture>` tags.
+This transformation ensures that your images are responsive and optimized for various devices and browsers.
+
+## Example: Transformation
+
+Below is an example of how the helper transforms content.
+
+### Before Transformation
+
+When an image is inserted into TinyMCE, it looks like this:
+
+```html
+<img src="images/example.jpg" alt="Example Image">
+```
+
+### After Transformation
+
+After the helper processes the content, the result is:
+
+```html
+
+<picture>
+    <source srcset="images/example.webp" type="image/webp">
+    <source srcset="images/example.jpg" type="image/jpeg">
+    <img src="images/example.jpg" alt="Example Image">
+</picture>
+```
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require isapp/filament-forms-tinyeditor-picture-tag
+composer require isapp/tinyeditor-picture-tag
 ```
 
-## Usage
-
-1. Add observer to your model - ```TinyeditorPictureTagObserver```
-2. Implement interface - ```TinyeditorPictureTagProvider```
-3. Add trait - ```HasMediaCollections```
-4. Implement method - ```getProvider```
-5. Expand ```registerMediaCollections``` method of spatie media library, call ```registerMediaCollection```
-
-
-Example of a model
+### Preparing your model
 
 ```php
-<?php declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
-use Isapp\TinyeditorPictureTag\Contracts\TinyeditorPictureTagProvider;
-use Isapp\TinyeditorPictureTag\Observers\TinyeditorPictureTagObserver;
-use Isapp\TinyeditorPictureTag\Concerns\HasMediaCollections;
+use Isapp\TinyeditorPictureTag\Concerns\InteractsWithTinyeditor;
+use Isapp\TinyeditorPictureTag\Contracts\HasTinyeditorPictureTag;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-#[ObservedBy([TinyeditorPictureTagObserver::class])]
-class Post extends Model implements TinyeditorPictureTagProvider, HasMedia
+class YourModel extends Model implements HasMedia, HasTinyeditorPictureTag
 {
     use InteractsWithMedia;
-    use HasMediaCollections;
-
-    protected $guarded = [];
-
-    public function getProvider(): string
-    {
-        return config('filament-forms-tinyeditor-picture-tag.driver');
-    }
-
-    public function registerMediaCollections(): void
-    {
-        $this->registerMediaCollection();
-    }
-}
-
+    use InteractsWithTinyeditor
 ```
 
-So when you have some filament form with tinyMCE editor, you can upload some images to content. When you save this form
-our observer will parse the content and replace common image on responsive images.
-Also, note, that the queue should be working.
+### Configuration: Setting Up TinyEditor Fields
 
-## Configuration
-
- - processed_fields - The fields with content where we need to replace img to responsive image.
- - storage_disk - the same as main storage driver, public, s3, etc...
- - driver - non-translatable, translatable. Default is non-translatable, if you use spatie translatable package and json fields you need translatable driver.
- - media_collection - any name which you want for image collection
- - media_conversions - media endpoints
-
-Default config:
+To configure how TinyEditor content is processed and make images responsive, set up the following method in your model:
 
 ```php
-return [
-    'processed_fields' => ['content'],
-    'storage_disk' => 'public',
-    'driver' => 'non-translatable',
-    'media_collection' => 'editor-collection',
-    'media_conversions' => [
-        [
-            'name' => 'sm_webp',
-            'width' => 410,
-            'format' => 'webp',
-            'position' => 1
-        ],
-        [
-            'name' => 'sm',
-            'width' => 410,
-            'position' => 2
-        ],
-        [
-            'name' => 'lg_webp',
-            'width' => 1200,
-            'format' => 'webp',
-            'min-width' => 576,
-            'position' => 3
-        ],
-        [
-            'name' => 'lg',
-            'width' => 1200,
-            'min-width' => 576,
-            'position' => 4
-        ],
-    ]
-];
+public function registerTinyeditorFields(): void
+{
+    $this->registerTinyeditorField('<field_name>', '<collection_name>')
+        ->registerSource(
+            $this->registerTinyeditorPictureSource('<conversion_name>')
+                ->setWidth(1200)
+                ->setFormat('webp')
+                ->setBreakpointMinWidth(576)
+        )
+        ->registerSource(
+            $this->registerTinyeditorPictureSource('<conversion_name>')
+                ->setWidth(1200)
+                ->setBreakpointMinWidth(576)
+        )
+        ->registerSource(
+            $this->registerTinyeditorPictureSource('<conversion_name>')
+                ->setWidth(410)
+                ->setFormat('webp')
+        )
+        ->registerSource(
+            $this->registerTinyeditorPictureSource('<conversion_name>')
+                ->setWidth(410)
+        );
+}
 ```
+
+This method configures the content field to generate responsive `<picture>` tags with multiple image sources based on the specified breakpoints, widths, and formats.
+
+## Documentation
+
+The full documentation for this package is still in progress and will be added soon. Stay tuned for updates!
+
+## Contribution
+
+This package was originally created to work seamlessly with [Filament](https://filamentphp.com/) and
+the [Filament Forms TinyEditor](https://github.com/mohamedsabil83/filament-forms-tinyeditor/).
+
+Contributions are welcome! If you have suggestions for improvements, new features, or find any issues, feel free to
+submit a pull request or open an issue in this repository.
+
+Thank you for helping make this package better for the community!
+
+## License
+
+This project is open-sourced software licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+You are free to use, modify, and distribute it in your projects, as long as you comply with the terms of the license.
