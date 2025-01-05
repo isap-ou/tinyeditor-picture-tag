@@ -23,6 +23,6 @@ class TinyeditorPictureTagServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'tinyeditor-picture-tag');
 
-        AboutCommand::add('My Package', fn () => ['Version' => '1.0.0']);
+        AboutCommand::add('TinyMCE Picture Tag Helper', static fn () => ['Version' => '0.1.1']);
     }
 }
