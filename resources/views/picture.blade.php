@@ -1,12 +1,12 @@
-@if (!empty($mediaConversions))
-    <picture>
-        @foreach($mediaConversions as $mediaConversion)
-            @if (!empty($mediaConversion['format']) && $mediaConversion['format'] === 'webp')
-                <source type="image/webp" srcset="{{ $media->getFullUrl($mediaConversion['name']) }}" @if (!empty($mediaConversion['width'])) media="(min-width: {{ $mediaConversion['width'] }}px)" @endif>
-            @else
-                <source type="{{ $media->mime_type }}" srcset="{{ $media->getFullUrl($mediaConversion['name']) }}" @if (!empty($mediaConversion['width'])) media="(min-width: {{ $mediaConversion['width'] }}px)" @endif>
-            @endif
+<picture>
+    @if (!empty($pictureTagConfig->getSources()))
+        @foreach($pictureTagConfig->getSources() as $mediaConversion)
+            <source
+                    type="{{$mediaConversion->getType($media->mime_type)}}"
+                    media="{{$mediaConversion->getMediaBreakPoints()}}"
+                    srcset="{{$media->getFullUrl($mediaConversion->getMediaConversionName())}}"
+            />
         @endforeach
-        {!! $imageHtml !!}
-    </picture>
-@endif
+    @endif
+    {!! $imageHtml !!}
+</picture>

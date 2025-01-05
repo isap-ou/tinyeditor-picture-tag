@@ -1,33 +1,37 @@
-<?php declare(strict_types=1);
+<?php
 
-namespace Isapp\FilamentFormsTinyeditorPictureTag\Processors;
+declare(strict_types=1);
 
-use Isapp\FilamentFormsTinyeditorPictureTag\Contracts\TinyeditorPictureTag;
+namespace Isapp\TinyeditorPictureTag\Processors;
 
-class TranslatableProcessor extends BaseProcessor
+use Isapp\TinyeditorPictureTag\Contracts\HasTinyeditorPictureTag;
+
+class TranslatableProcessor extends Processor
 {
-    public function convert(TinyeditorPictureTag $model): void
+    /**
+     * @throws \PHPHtmlParser\Exceptions\ChildNotFoundException
+     * @throws \PHPHtmlParser\Exceptions\UnknownChildTypeException
+     * @throws \PHPHtmlParser\Exceptions\CircularException
+     * @throws \PHPHtmlParser\Exceptions\StrictException
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist
+     * @throws \PHPHtmlParser\Exceptions\NotLoadedException
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig
+     */
+    public function convert(HasTinyeditorPictureTag $model, string $field): void
     {
-        if (!method_exists($model, 'getTranslations')) {
+        if (! method_exists($model, 'getTranslations')) {
             return;
         }
 
-        $fieldsToProcess = $model->pictureTags;
-        if (empty($fieldsToProcess)) {
+        if ($model->isDirty($field) === false) {
             return;
         }
 
-        foreach ($fieldsToProcess as $field) {
-            if ($model->isDirty($field->field) === false) {
-                continue;
-            }
+        $translations = $model->getTranslations($field);
 
-            $translations = $model->getTranslations($field->field);
-
-            foreach ($translations as $locale => $content) {
-                if (!empty($content)) {
-                    $model->setTranslation($field->field, $locale, $this->process($content, $model));
-                }
+        foreach ($translations as $locale => $content) {
+            if (! empty($content)) {
+                $model->setTranslation($field, $locale, $this->process($content, $model, $model->getTinyeditorFields()[$field]));
             }
         }
 

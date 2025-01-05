@@ -30,9 +30,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
-use Isapp\FilamentFormsTinyeditorPictureTag\Contracts\TinyeditorPictureTagProvider;
-use Isapp\FilamentFormsTinyeditorPictureTag\Observers\TinyeditorPictureTagObserver;
-use Isapp\FilamentFormsTinyeditorPictureTag\Traits\HasMediaCollections;
+use Isapp\TinyeditorPictureTag\Contracts\TinyeditorPictureTagProvider;
+use Isapp\TinyeditorPictureTag\Observers\TinyeditorPictureTagObserver;
+use Isapp\TinyeditorPictureTag\Concerns\HasMediaCollections;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
