@@ -1,6 +1,6 @@
 # TinyMCE Picture Tag Helper for Laravel
 
-[![TinyMCE Picture Tag Helper for Laravel](https://github.com/isap-ou/tinyeditor-picture-tag/images/banner.jpg)](https://github.com/isap-ou/tinyeditor-picture-tag)
+[![TinyMCE Picture Tag Helper for Laravel](https://github.com/isap-ou/tinyeditor-picture-tag/blob/main/images/banner.jpg?raw=true)](https://github.com/isap-ou/tinyeditor-picture-tag)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/isapp/tinyeditor-picture-tag.svg?style=flat-square)](https://packagist.org/packages/isapp/tinyeditor-picture-tag)
 [![Total Downloads](https://img.shields.io/packagist/dt/isapp/tinyeditor-picture-tag.svg?style=flat-square)](https://packagist.org/packages/isapp/tinyeditor-picture-tag)
 
